@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="userImpl" class="com.wkk.dao.impl.UserDaoImpl"/>
+        <!-- collaborators and configuration for this bean go here -->
+
+    <bean id="mysqlImpl" class="com.wkk.dao.impl.UserDaoMysqlImpl"/>
+
+    <bean id="userServiceImpl" class="com.wkk.service.impl.UserServiceImpl">
+       <property name="userDao" ref="mysqlImpl"/>
+    </bean>
+
+    <!--
+    ref: 引用spring容器中创建好的对象
+    val: 具体的值 数据类型
+    -->
+
+
+</beans>

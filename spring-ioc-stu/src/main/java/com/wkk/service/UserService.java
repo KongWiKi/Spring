@@ -9,5 +9,5 @@ import com.wkk.dao.UserDao;
  */
 public interface UserService {
     void getUser();
-    void setUserDao(UserDao userDao);
+//    void setUserDao(UserDao userDao);
 }

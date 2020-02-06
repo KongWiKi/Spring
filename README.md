@@ -1,4 +1,4 @@
-## Spring
+## Spring --- 文档学习
 
 ### Spring简介
 
@@ -43,7 +43,7 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
 
 控制反转是使用描述或注解并通过第三方生产或获取特定对象的方式。在Spring中实现控制反转的是IOC容器，其实现方法是依赖注入。
 
-#### 学习IOC --- 搭建环境
+#### 学习IoC --- 搭建环境
 
 ![](/home/kongweikun/Pictures/Screenshot from 2020-02-06 11-36-41.png)
 
@@ -60,9 +60,163 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
 
    使用set注入， 程序被动接受对象。
 
-2. 
 
 
+
+### IoC --- Spring
+
+
+
+### IoC创建对象的方式
+
+1. 使用无参构造创建对象
+
+2. 若是无无参数构造方法， 按照文档， 有如下一些方式
+
+   1. 下标的方式
+
+      ```xml
+      <bean id="user" class="com.wkk.pojo.User">
+          <constructor-arg index="0" value="维坤坤"/>
+      </bean>
+      ```
+
+      
+
+   2. 参数数据类型(多参数且类型相同麻烦)
+
+      ```xml
+      <bean id="user" class="com.wkk.pojo.User">
+          <constructor-arg type="java.lang.String" value="孔维坤"/>
+      </bean>
+      ```
+
+      
+
+   3. 参数
+
+      ```xml
+      <bean id="user" class="com.wkk.pojo.User">
+          <constructor-arg name="name" value="维坤坤"/>
+      </bean>
+      ```
+
+### DI（依赖注入）
+
+####  1. 构造器注入
+
+```java
+public class SimpleMovieLister {
+
+    // the SimpleMovieLister has a dependency on a MovieFinder
+    private MovieFinder movieFinder;
+
+    // a constructor so that the Spring container can inject a MovieFinder
+    public SimpleMovieLister(MovieFinder movieFinder) {
+        this.movieFinder = movieFinder;
+    }
+
+    // business logic that actually uses the injected MovieFinder is omitted...
+}
+```
+
+
+
+#### 2.  setter注入 （核心）
+
+```java
+public class SimpleMovieLister {
+
+    // the SimpleMovieLister has a dependency on the MovieFinder
+    private MovieFinder movieFinder;
+
+    // a setter method so that the Spring container can inject a MovieFinder
+    public void setMovieFinder(MovieFinder movieFinder) {
+        this.movieFinder = movieFinder;
+    }
+
+    // business logic that actually uses the injected MovieFinder is omitted...
+}
+```
+
+其他各种花式类型的数据注入可参考[文档](https://docs.spring.io/spring/docs/5.2.3.RELEASE/spring-framework-reference/core.html#beans-factory-properties-detailed)
+
+```xml
+<bean id="student" class="com.wkk.Student">
+        <!--简单数据类型-->
+        <property name="name" value="维坤坤"/>
+        <!--bean注入-->
+        <property name="address" ref="address"/>
+        <!--数组注入-->
+        <property name="books" >
+            <array>
+                <value>飘</value>
+                <value>三体</value>
+                <value>安娜卡列尼娜</value>
+            </array>
+        </property>
+        <!--List注入-->
+        <property name="hobbys">
+            <list>
+                <value>吃饭</value>
+                <value>听歌</value>
+                <value>睡觉</value>
+            </list>
+        </property>
+        <!--Map注入-->
+        <property name="card">
+            <map>
+                <entry key="学号" value="1111"/>
+                <entry key="金额" value="30000"/>
+            </map>
+        </property>
+        <!--Set注入-->
+        <property name="games">
+            <set>
+                <value>塞尔达</value>
+                <value>马里奥</value>
+                <value>暗影</value>
+            </set>
+        </property>
+        <!--空值注入-->
+        <property name="wife">
+            <null>无</null>
+        </property>
+        <!--props注入-->
+        <property name="info">
+            <props>
+                <prop key="admin">admin</prop>
+                <prop key="suppor">support@exmaple.orz</prop>
+            </props>
+        </property>
+    </bean>
+```
+
+
+
+#### 3. Bean的作用域
+
+![](https://raw.githubusercontent.com/KongWiki/cloudImg/master/bean%E7%9A%84%E4%BD%9C%E7%94%A8%E5%9F%9F.png)
+
+具体详见文档
+
+**singleton**
+
+![image](https://raw.githubusercontent.com/KongWiki/cloudImg/master/singleton.png)
+
+```xml
+<bean id="user" class="com.wkk.User" scope="singleton"/>
+```
+
+
+
+**prototype**
+
+![image](https://raw.githubusercontent.com/KongWiki/cloudImg/master/prototype.png)
+
+```xml
+<bean id="user" class="com.wkk.User" scope="prototype"/>
+```
 
 
 

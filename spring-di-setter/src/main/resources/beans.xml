@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="address" class="com.wkk.Address">
+        <property name="address" value="浙江杭州"/>
+    </bean>
+    <bean id="student" class="com.wkk.Student">
+        <!--简单数据类型-->
+        <property name="name" value="维坤坤"/>
+        <!--bean注入-->
+        <property name="address" ref="address"/>
+        <!--数组注入-->
+        <property name="books" >
+            <array>
+                <value>飘</value>
+                <value>三体</value>
+                <value>安娜卡列尼娜</value>
+            </array>
+        </property>
+        <!--List注入-->
+        <property name="hobbys">
+            <list>
+                <value>吃饭</value>
+                <value>听歌</value>
+                <value>睡觉</value>
+            </list>
+        </property>
+        <!--Map注入-->
+        <property name="card">
+            <map>
+                <entry key="学号" value="1111"/>
+                <entry key="金额" value="30000"/>
+            </map>
+        </property>
+        <!--Set注入-->
+        <property name="games">
+            <set>
+                <value>塞尔达</value>
+                <value>马里奥</value>
+                <value>暗影</value>
+            </set>
+        </property>
+        <!--空值注入-->
+        <property name="wife">
+            <null>无</null>
+        </property>
+        <!--props注入-->
+        <property name="info">
+            <props>
+                <prop key="admin">admin</prop>
+                <prop key="suppor">support@exmaple.orz</prop>
+            </props>
+        </property>
+    </bean>
+</beans>
