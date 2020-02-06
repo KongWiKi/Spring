@@ -218,7 +218,21 @@ public class SimpleMovieLister {
 <bean id="user" class="com.wkk.User" scope="prototype"/>
 ```
 
+### 使用Spring-AOP
 
+**使用AOP织人，需要导入的依赖**
+
+```xml
+<dependency>
+    <groupId>org.aspectj</groupId>
+    <artifactId>aspectjweaver</artifactId>
+    <version>1.9.4</version>
+</dependency>
+```
+
+
+
+ 
 
 ## reference
 
