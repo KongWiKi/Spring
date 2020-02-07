@@ -17,22 +17,22 @@
         <property name="name" value="孔维坤"/>
     </bean>
     <!--无参构造方法的使用示例-->
-<!--    <bean id="user" class="com.wkk.pojo.User">-->
+<!--    <bean id="user" class="com.wkk.pojo.Student">-->
 <!--        <property name="name" value="维坤坤"/>-->
 <!--    </bean>-->
 
     <!--1. 下标方式    -->
-<!--    <bean id="user" class="com.wkk.pojo.User">-->
+<!--    <bean id="user" class="com.wkk.pojo.Student">-->
 <!--        <constructor-arg index="0" value="维坤坤"/>-->
 <!--    </bean>-->
 
     <!--2. 参数数据类型    -->
-<!--    <bean id="user" class="com.wkk.pojo.User">-->
+<!--    <bean id="user" class="com.wkk.pojo.Student">-->
 <!--        <constructor-arg type="java.lang.String" value="孔维坤"/>-->
 <!--    </bean>-->
 
     <!--3. 指明具体的参数-->
-    <bean id="user" class="com.wkk.pojo.User">
+    <bean id="user" class="com.wkk.pojo.Student">
         <constructor-arg name="name" value="维坤坤"/>
     </bean>
 

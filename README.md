@@ -1,4 +1,4 @@
-## Spring --- 文档学习
+## Spring --- 文档学习笔记
 
 ### Spring简介
 
@@ -76,7 +76,7 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
    1. 下标的方式
 
       ```xml
-      <bean id="user" class="com.wkk.pojo.User">
+      <bean id="user" class="com.wkk.pojo.Student">
           <constructor-arg index="0" value="维坤坤"/>
       </bean>
       ```
@@ -86,7 +86,7 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
    2. 参数数据类型(多参数且类型相同麻烦)
 
       ```xml
-      <bean id="user" class="com.wkk.pojo.User">
+      <bean id="user" class="com.wkk.pojo.Student">
           <constructor-arg type="java.lang.String" value="孔维坤"/>
       </bean>
       ```
@@ -96,7 +96,7 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
    3. 参数
 
       ```xml
-      <bean id="user" class="com.wkk.pojo.User">
+      <bean id="user" class="com.wkk.pojo.Student">
           <constructor-arg name="name" value="维坤坤"/>
       </bean>
       ```
@@ -318,12 +318,12 @@ public class AnnotationPointcut {
  1. 导入相关依赖
 
      	1. junit
-     	2. mybatis
-     	3. mysql-connector
-     	4. spring
-     	5. aop织入
-     	6. spring-mybatis
-     	7. spring-jdbc 
+     2. mybastis
+     3. mysql-connector
+     4. spring
+     5. aop织入
+     6. mybat-spring
+     7. spring-jdbc(c3p0等)
 
  2. 编写配置文件
 
@@ -403,7 +403,7 @@ public class AnnotationPointcut {
    <!DOCTYPE mapper
            PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
            "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-   <mapper namespace="com.wkk.dao.UserDao">
+   <mapper namespace="com.wkk.dao.UsersDao">
        <select id="selectUser" resultType="user">
            select * from mybatis.user;
        </select>
@@ -484,9 +484,80 @@ MyBatis-Spring 会帮助你将 MyBatis 代码无缝地整合到 Spring 中。它
 
 
 
+#### 步骤
 
+1. 编写数据源
 
- 
+2. 编写接口
+
+3. 编写spring配置文件
+
+   一下的步骤是按照Mybatis原生读取数据的方式来完成的
+
+   ```java
+   // 对应的resource
+   String resource = "mybatis/mybatis-config.xml";
+   // 流读取
+   InputStream inputStream = Resources.getResourceAsStream(resource);
+   // sqlSessionFactory
+   SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+   SqlSession sqlSession = sqlSessionFactory.openSession(true);
+   UserDao mapper = sqlSession.getMapper(UserDao.class);        
+   ```
+
+   
+
+   1. dataSource
+
+      ```xml
+      <!--dataSource: 使用Spring数据源替换Mybatis的配置 也可以使用其他 如 c3p0 dbcp
+         此处使用的为Spring的jdbc: org.springframework.jdbc.datasource.DriverManagerDataSource-->
+      <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+          <property name="driverClassName" value="${jdbc.driver}"/>
+          <property name="url" value="${jdbc.url}"/>
+          <property name="username" value="${jdbc.username}"/>
+          <property name="password" value="${jdbc.password}"/>
+      </bean>
+      ```
+
+   2. sqlsessionFactory
+
+      ````xml
+       <!--SqlSessionFactory-->
+       <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+           <property name="dataSource" ref="dataSource"/>
+           <!--    mybatis的基础配置指定    -->
+           <property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
+           <!--映射的xml-->
+           <property name="mapperLocations" value="classpath:mybatis/mapper.xml"/>
+       </bean>
+      ````
+
+   3. sqlSession
+
+      ```xml
+      <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+          <constructor-arg index="0" ref="sqlSessionFactory"/>
+      </bean>
+      ```
+
+4. 因为使用spring进行完成， 所以需要对接口有对应的实现，然后注入到spring中
+
+5. 测试该类
+
+### 声明式事物 
+
+#### 事物的ACID原则
+
+* 原子性(Atomicity)
+* 一致性(Consistency)
+* 隔离性(Isolation)
+  * 多个业务可能操作同一个资源， 防止数据的损坏
+* 持久性(Durability)
+
+**编程式事物**: 代码中修改
+
+**声明式事物** : AOP 
 
 ## reference
 
@@ -494,4 +565,3 @@ MyBatis-Spring 会帮助你将 MyBatis 代码无缝地整合到 Spring 中。它
 
 * [mybatis文档](https://mybatis.org/mybatis-3/zh/index.html)
 
-  
