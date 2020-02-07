@@ -218,7 +218,7 @@ public class SimpleMovieLister {
 <bean id="user" class="com.wkk.User" scope="prototype"/>
 ```
 
-### 使用Spring-AOP
+### Spring-AOP
 
 **使用AOP织人，需要导入的依赖**
 
@@ -230,6 +230,260 @@ public class SimpleMovieLister {
 </dependency>
 ```
 
+#### 1. 自定义类实现AOP
+
+```xml
+<!--注册bean-->    
+<bean id="diy" class="com.wkk.pointcut.DiyPointcut"/>
+<!--    自定义类实现AOP    -->
+<aop:config>
+            <aop:aspect ref="diy">
+                <aop:pointcut id="diyPointcut" expression="execution(* com.wkk.service.impl.UserServiceImpl.*(..))"/>
+                <aop:before pointcut-ref="diyPointcut" method="before"/>
+                <aop:after pointcut-ref="diyPointcut" method="after"/>
+            </aop:aspect>
+</aop:config>
+```
+
+```java
+public class DiyPointcut {
+    public void before(){
+        System.out.println("--------方法执行前------------");
+    }
+
+    public void after(){
+        System.out.println("--------方法执行后-------------");
+    }
+}
+```
+
+```java
+public class UserServiceImpl implements UserService {
+    public void add() {
+        System.out.println("增加了一个用户");
+    }
+
+    public void delete() {
+        System.out.println("删除了一个用户");
+    }
+
+    public void update() {
+        System.out.println("更新了一个用户");
+    }
+
+    public void query() {
+        System.out.println("查询了一个用户");
+    }
+}
+```
+
+#### 2. 基于注解
+
+```xml
+<!--第三种方式:注解实现-->
+<bean id="annotationPointcut" class="com.wkk.pointcut.AnnotationPointcut"/>
+<aop:aspectj-autoproxy/>
+```
+
+```java
+@Aspect
+public class AnnotationPointcut {
+    @Before("execution(* com.wkk.service.impl.UserServiceImpl.*(..))")
+    public void before(){
+        System.out.println("------方法执行前---------");
+    }
+    @After("execution(* com.wkk.service.impl.UserServiceImpl.*(..)))")
+    public  void after(){
+        System.out.println("------方法执行后---------");
+    }
+
+    @Around("execution(* com.wkk.service.impl.UserServiceImpl.*(..))")
+    public void around(ProceedingJoinPoint jp) throws Throwable {
+        System.out.println("环绕前");
+        System.out.println("签名:"+jp.getSignature());
+        //执行目标方法proceed
+        Object proceed = jp.proceed();
+        System.out.println("环绕后");
+        System.out.println(proceed);
+    }
+}
+```
+
+
+
+### Mybatis整合
+
+#### 步骤
+
+ 1. 导入相关依赖
+
+     	1. junit
+     	2. mybatis
+     	3. mysql-connector
+     	4. spring
+     	5. aop织入
+     	6. spring-mybatis
+     	7. spring-jdbc 
+
+ 2. 编写配置文件
+
+    
+
+ 3. 测试
+
+#### 使用MyBatis基本步骤
+
+1. 编写实体(pojo)
+
+   ```java
+   @Data
+   public class User {
+       private int id;
+       private String name;
+       private String password;
+   
+   }
+   ```
+
+   
+
+2. 编写核心配置文件(config.xml)
+
+   ```xml
+   <?xml version="1.0" encoding="UTF-8" ?>
+   <!DOCTYPE configuration
+           PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+           "http://mybatis.org/dtd/mybatis-3-config.dtd">
+   <!--configuration核心配置文件-->
+   <configuration>
+       <!--独立出连接MySQL的配置
+       driver: 使用的驱动
+       url: 连接的url
+       username:
+       password
+       -->
+       <properties resource="mybatis/jdbc.properties"/>
+   
+       <typeAliases>
+           <package name="com.wkk.pojo"/>
+       </typeAliases>
+   
+   
+       <!--    事务管理和连接池的配置-->
+       <environments default="development">
+           <environment id="development">
+               <transactionManager type="JDBC"/>
+               <dataSource type="POOLED">
+                   <property name="driver" value="${driver}"/>
+                   <property name="url" value="${url}"/>
+                   <property name="username" value="${username}"/>
+                   <property name="password" value="${password}"/>
+               </dataSource>
+           </environment>
+       </environments>
+       <mappers>
+           <mapper resource="mybatis/mapper.xml"/>
+       </mappers>
+   </configuration>
+   
+   ```
+
+3. 编写接口(dao)
+
+   ```java
+   public interface UserDao {
+       List<User> selectUser();
+   }
+   ```
+
+4. 编写mapper.xml
+
+   ```xml
+   <?xml version="1.0" encoding="UTF-8" ?>
+   <!DOCTYPE mapper
+           PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+           "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+   <mapper namespace="com.wkk.dao.UserDao">
+       <select id="selectUser" resultType="user">
+           select * from mybatis.user;
+       </select>
+   </mapper>
+   
+   ```
+
+   >既然 MyBatis 的行为已经由上述元素配置完了，我们现在就要定义 SQL 映射语句了。 但是首先我们需要告诉 MyBatis 到哪里去找到这些语句。 Java 在自动查找这方面没有提供一个很好的方法，所以最佳的方式是告诉 MyBatis 到哪里去找映射文件。 你可以使用相对于类路径的资源引用， 或完全限定资源定位符（包括 `file:///` 的 URL），或类名和包名等        ---- Mybatis官方文档
+
+   ​	
+
+   ```xml
+   <!-- 使用相对于类路径的资源引用 -->
+   <mappers>
+     <mapper resource="org/mybatis/builder/AuthorMapper.xml"/>
+     <mapper resource="org/mybatis/builder/BlogMapper.xml"/>
+     <mapper resource="org/mybatis/builder/PostMapper.xml"/>
+   </mappers>
+   ```
+
+   ```xml
+   <!-- 使用完全限定资源定位符（URL） -->
+   <mappers>
+     <mapper url="file:///var/mappers/AuthorMapper.xml"/>
+     <mapper url="file:///var/mappers/BlogMapper.xml"/>
+     <mapper url="file:///var/mappers/PostMapper.xml"/>
+   </mappers>
+   ```
+
+   ```xml
+   <!-- 使用映射器接口实现类的完全限定类名 -->
+   <mappers>
+     <mapper class="org.mybatis.builder.AuthorMapper"/>
+     <mapper class="org.mybatis.builder.BlogMapper"/>
+     <mapper class="org.mybatis.builder.PostMapper"/>
+   </mappers>
+   ```
+
+   ```xml
+   <!-- 将包内的映射器接口实现全部注册为映射器 -->
+   <mappers>
+     <package name="org.mybatis.builder"/>
+   </mappers>
+   <!--需要将映射和接口命名相同-->
+   ```
+
+5. 测试
+
+   ```java
+   // 对应的resource
+   String resource = "mybatis/mybatis-config.xml";
+   // 流读取
+   InputStream inputStream = Resources.getResourceAsStream(resource);
+   // sqlSessionFactory
+   SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+   SqlSession sqlSession = sqlSessionFactory.openSession(true);
+   
+   UserDao mapper = sqlSession.getMapper(UserDao.class);
+   List<User> users = mapper.selectUser();
+   for (User user : users) {
+       System.out.println(user);
+   }
+   ```
+
+   
+
+#### MyBatis-Spring
+
+MyBatis-Spring 会帮助你将 MyBatis 代码无缝地整合到 Spring 中。它将允许 MyBatis 参与到 Spring 的事务管理之中，创建映射器 mapper 和 `SqlSession` 并注入到 bean 中，以及将 Mybatis 的异常转换为 Spring 的 `DataAccessException`。最终，可以做到应用代码不依赖于 MyBatis，Spring 或 MyBatis-Spring。
+
+```xml
+<dependency>
+  <groupId>org.mybatis</groupId>
+  <artifactId>mybatis-spring</artifactId>
+  <version>2.0.3</version>
+</dependency>
+```
+
+
+
 
 
  
@@ -237,5 +491,7 @@ public class SimpleMovieLister {
 ## reference
 
 * [Spring：概述、IOC理论](https://blog.kuangstudy.com/index.php/archives/511/)
+
+* [mybatis文档](https://mybatis.org/mybatis-3/zh/index.html)
 
   

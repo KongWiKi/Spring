@@ -20,14 +20,14 @@
     <!--        <aop:advisor advice-ref="log" pointcut-ref="pointcut"/>-->
     <!--        <aop:advisor advice-ref="afterLog" pointcut-ref="pointcut"/>-->
     <!--    </aop:config>-->
-    <!--自定义类实现AOP    -->
-    <!--    <aop:config>-->
-    <!--        <aop:aspect ref="diy">-->
-    <!--            <aop:pointcut id="diyPointcut" expression="execution(* com.wkk.service.impl.UserServiceImpl.*(..))"/>-->
-    <!--            <aop:before pointcut-ref="diyPointcut" method="before"/>-->
-    <!--            <aop:after pointcut-ref="diyPointcut" method="after"/>-->
-    <!--        </aop:aspect>-->
-    <!--    </aop:config>-->
+<!--    自定义类实现AOP    -->
+<!--        <aop:config>-->
+<!--            <aop:aspect ref="diy">-->
+<!--                <aop:pointcut id="diyPointcut" expression="execution(* com.wkk.service.impl.UserServiceImpl.*(..))"/>-->
+<!--                <aop:before pointcut-ref="diyPointcut" method="before"/>-->
+<!--                <aop:after pointcut-ref="diyPointcut" method="after"/>-->
+<!--            </aop:aspect>-->
+<!--        </aop:config>-->
 
     <!--3. 基于注解    -->
     <!--第三种方式:注解实现-->
