@@ -36,7 +36,7 @@ public class MyTest {
 //        }
         // 以上为使用纯Mybatis配置
 
-        ApplicationContext context = new ClassPathXmlApplicationContext("spring/spring-dao.xml");
+        ApplicationContext context = new ClassPathXmlApplicationContext("spring/applicationContext.xml");
         UserDao userDaoImpl = context.getBean("userDaoImpl", UserDao.class);
         List<User> users = userDaoImpl.selectUser();
         for (User user : users) {

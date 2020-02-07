@@ -15,6 +15,7 @@
         <property name="password" value="${jdbc.password}"/>
     </bean>
 
+<!-- 规定模板  -->
     <!--SqlSessionFactory-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
@@ -27,10 +28,5 @@
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
         <constructor-arg index="0" ref="sqlSessionFactory"/>
     </bean>
-
-    <bean id="userDaoImpl" class="com.wkk.dao.impl.UserDaoImpl">
-        <property name="sessionTemplate" ref="sqlSession"/>
-    </bean>
-
 
 </beans>
