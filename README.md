@@ -60,13 +60,6 @@ Spring容器在初始化时先读取配置文件，根据配置文件或元数�
 
    使用set注入， 程序被动接受对象。
 
-
-
-
-### IoC --- Spring
-
-
-
 ### IoC创建对象的方式
 
 1. 使用无参构造创建对象
@@ -218,6 +211,51 @@ public class SimpleMovieLister {
 <bean id="user" class="com.wkk.User" scope="prototype"/>
 ```
 
+### Spring 中三种装配 bean 的方式
+
+Spring会从两个角度去自动化实现装配：
+
+1. 组件扫描
+2. 自动装配
+
+这两者需要配合才能达到自动化装配的目的，组件扫描去发现包中的 bean，自动装配则是相当于常见的 new 操作。
+
+#### 使用xml显示配置
+
+该使用方式已经在DI中写了
+
+步骤如下： 
+
+1. 在xml中填写需要装配的bean
+   1. 填写class
+   2. 填写id
+   3. 若有参数， 根据情况填写对应的内容
+
+#### 在java中显示配置
+
+
+
+#### 隐式的bean发现机制和自动装配
+
+1. @component表示当前的类已经是一个Spring的一个bean了
+
+   1. 可以在里面添加别名
+
+2. 在Config文件中编写配置
+
+   1. @ComponentScan: 开启组件扫描
+
+      其类似于xml中的`<context:component-scan base-package="xxx">`
+
+   2. @Configuration
+
+3. @Autowired
+
+   1. 在需要的地方进行注入
+   2. 使用@Qualifier("iphone")进行指定实现类
+
+   
+
 ### Spring-AOP
 
 **使用AOP织人，需要导入的依赖**
@@ -322,7 +360,7 @@ public class AnnotationPointcut {
      3. mysql-connector
      4. spring
      5. aop织入
-     6. mybat-spring
+     6. mybatis-spring
      7. spring-jdbc(c3p0等)
 
  2. 编写配置文件
@@ -555,7 +593,7 @@ MyBatis-Spring 会帮助你将 MyBatis 代码无缝地整合到 Spring 中。它
   * 多个业务可能操作同一个资源， 防止数据的损坏
 * 持久性(Durability)
 
-**编程式事物**: 代码中修改
+**编程式事物**: 代码中修改 
 
 **声明式事物** : AOP 
 

@@ -11,13 +11,16 @@ import com.wkk.service.UserService;
 public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
-    //     利用set进行动态实现值的注入
-    public void setUserDao(UserDao userDao) {
+    // 利用构造方法注入
+    public UserServiceImpl(UserDao userDao){
         this.userDao = userDao;
     }
+//    //利用set进行动态实现值的注入
+//    public void setUserDao(UserDao userDao) {
+//        this.userDao = userDao;
+//    }
 
     public void getUser() {
-    //      System.out.println("UserService实现类: 对用户数据的逻辑操作(用户角度)");
         userDao.getUser();
     }
 

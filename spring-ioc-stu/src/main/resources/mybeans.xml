@@ -10,7 +10,8 @@
     <bean id="mysqlImpl" class="com.wkk.dao.impl.UserDaoMysqlImpl"/>
 
     <bean id="userServiceImpl" class="com.wkk.service.impl.UserServiceImpl">
-       <property name="userDao" ref="mysqlImpl"/>
+<!--       <property name="userDao" ref="mysqlImpl"/>-->
+        <constructor-arg ref="mysqlImpl"/>
     </bean>
 
     <!--
